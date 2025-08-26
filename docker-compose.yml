@@ -22,7 +22,7 @@ services:
       start_period: 20s
 
   backend: 
-    image: ${BACKEND}
+    image: "${BACKEND}"
     container_name: backend
     environment:
       DB_HOST: mysql
@@ -40,7 +40,7 @@ services:
       - pub-network
 
   frontend:
-    image: ${FRONTEND}
+    image: "${FRONTEND}"
     container_name: frontend
     environment:
       REACT_APP_API: http://backend:5000
