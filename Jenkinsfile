@@ -24,9 +24,6 @@ pipeline{
         // }
         stage("Checkout Code"){
             steps{
-                // options{
-                //     retry(2)
-                // }
                 git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
             }
         }
@@ -75,7 +72,7 @@ pipeline{
         }
         stage("Quality Gate"){
             steps{
-                timeout(time: 2, unit: 'MINUTES'){
+                timeout(time: 5, unit: 'MINUTES'){
                     waitForQualityGate abortPipeline: true, credentialsId: 'sonarqube-token'
                 }
             }      
