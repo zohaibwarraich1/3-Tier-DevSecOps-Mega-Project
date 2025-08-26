@@ -24,9 +24,9 @@ pipeline{
         // }
         stage("Checkout Code"){
             steps{
-                options{
-                    retry(2)
-                }
+                // options{
+                //     retry(2)
+                // }
                 git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
             }
         }
