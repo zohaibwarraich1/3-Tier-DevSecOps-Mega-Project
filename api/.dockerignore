@@ -1,0 +1,12 @@
+.git
+.gitignore
+.vscode
+docker-compose.yml
+Dockerfile
+README.md
+LICENSE
+*.log
+*.md
+*.env
+*.sqlite3
+
