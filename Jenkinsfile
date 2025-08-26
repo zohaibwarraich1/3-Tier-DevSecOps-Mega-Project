@@ -14,6 +14,7 @@ pipeline{
         disableResume()
         disableConcurrentBuilds abortPrevious: true
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3')
+        skipDefaultCheckout()
     }
     stages{
         // stage("Clean Workspace"){
