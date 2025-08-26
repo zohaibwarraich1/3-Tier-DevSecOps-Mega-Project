@@ -117,16 +117,16 @@ pipeline{
         }
         stage("Deploye using Docker Compose"){
             steps{
-                input {
+                script {
                     message 'Continue to Deployment ?'
                     ok 'Yes'
-                }
-                withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
-                    sh '''
-                        docker compose --env-file ${ENV_FILE} up -d \
-                        -e BACKEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT} \
-                        -e FRONTEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
-                    '''
+                    withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
+                        sh '''
+                            docker compose --env-file ${ENV_FILE} up -d \
+                            -e BACKEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT} \
+                            -e FRONTEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
+                        '''
+                    }
                 }
             }
         }
