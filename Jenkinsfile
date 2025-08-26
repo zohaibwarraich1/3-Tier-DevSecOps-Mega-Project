@@ -115,6 +115,14 @@ pipeline{
                 '''
             }
         }
+        stage("Trivy Scan Images for Vulnerability"){
+            steps{
+                input {
+                    message 'Continue to Deployment ?'
+                    ok 'Yes'
+                }
+            }
+        }
         stage("Deploye using Docker Compose"){
             steps{
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
