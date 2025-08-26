@@ -118,7 +118,7 @@ pipeline{
         stage("Deploye using Docker Compose"){
             steps{
                 timeout(time: 1, unit: 'HOURS') {
-                    input message: 'Continue to Deployment ?' ok: 'Yes'
+                    input message: 'Continue to Deployment ?', ok: 'Yes'
                 }
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
                     sh '''
