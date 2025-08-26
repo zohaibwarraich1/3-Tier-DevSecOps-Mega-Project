@@ -21,14 +21,14 @@ pipeline{
         //         cleanWs()
         //     }
         // }
-        stage("Checkout Code"){
-            steps{
-                options{
-                    retry(2)
-                }
-                git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
-            }
-        }
+        // stage("Checkout Code"){
+        //     steps{
+        //         options{
+        //             retry(2)
+        //         }
+        //         git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
+        //     }
+        // }
         stage("Installing Dependencies"){
             steps{
                 dir('client') {
