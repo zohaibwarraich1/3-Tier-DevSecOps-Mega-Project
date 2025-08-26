@@ -4,7 +4,7 @@ pipeline{
     }
     environment{
         SONAR_SCANNER = tool 'sonarqube-scanner-tool'
-        PROJECT_NAME = '3-tier-devsecops-mega-project'
+        PROJECT_NAME = 'three-tier-devsecops-mega-project'
         DOCKER_CREDS = credentials('docker-token')
     }
     tools{
