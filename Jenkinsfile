@@ -14,7 +14,7 @@ pipeline{
         disableResume()
         disableConcurrentBuilds abortPrevious: true
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3')
-        skipDefaultCheckout()
+        // skipDefaultCheckout()
     }
     stages{
         // stage("Clean Workspace"){
@@ -22,11 +22,11 @@ pipeline{
         //         cleanWs()
         //     }
         // }
-        stage("Checkout Code"){
-            steps{
-                git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
-            }
-        }
+        // stage("Checkout Code"){
+        //     steps{
+        //         git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
+        //     }
+        // }
         stage("Installing Dependencies"){
             steps{
                 dir('client') {
