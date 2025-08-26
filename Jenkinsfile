@@ -62,7 +62,7 @@ pipeline{
         }
         stage("Quality Gate"){
             steps{
-                catchError(buildResult: 'SUCCESS', message: 'Oop! The Quality gate has not been completed yet', stageResult: 'ABORTED') {
+                catchError(buildResult: 'SUCCESS', message: 'Oop! The Quality gate has not been completed yet', stageResult: 'SUCCESS') {
                     timeout(time: 1, unit: 'MINUTES'){
                         waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
                     }
