@@ -20,7 +20,7 @@ pipeline{
         stage("Checkout Code"){
             steps{
                 // git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
-                sh "$GIT_COMMIT"
+                sh 'echo $GIT_COMMIT'
             }
         }
     //     stage("Installing Dependencies"){
