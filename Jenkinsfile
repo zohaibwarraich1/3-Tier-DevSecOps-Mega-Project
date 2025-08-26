@@ -92,6 +92,8 @@ pipeline{
                         echo $PASSWORD | docker login -u $USERNAME --password-stdin
                         docker push ${USERNAME}/${PROJECT_NAME}-api-image:${GIT_COMMIT}
                         docker push ${USERNAME}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
+                        # after pushing to dockerhub clean the images
+                        docker rmi -f $(docker images)
                     '''
                 }
             }
@@ -115,7 +117,7 @@ pipeline{
                 '''
             }
         }
-        stage("Deploye using Docker Compose"){
+        stage("Deploy using Docker Compose"){
             steps{
                 input message: 'Continue to Deployment ?', ok: 'Yes'
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
@@ -167,7 +169,7 @@ pipeline{
                 || true
             '''
         }
-        unsuccessful {
+        failure {
             cleanWs()
         }
     }
