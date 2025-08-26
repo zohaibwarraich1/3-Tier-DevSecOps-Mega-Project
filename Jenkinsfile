@@ -127,9 +127,13 @@ pipeline{
             steps{
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
                     sh 'docker compose --env-file ${ENV_FILE} up -d'
-                    
                 }
             }
+        }
+    }
+    post{
+        always{
+            cleanWs()
         }
     }
 }
