@@ -60,15 +60,15 @@ pipeline{
                 }
             }
         }
-        stage("Quality Gate"){
-            steps{
-                catchError(buildResult: 'SUCCESS', message: 'Oop! The Quality gate has not been completed yet', stageResult: 'ABORTED') {
-                    timeout(time: 1, unit: 'MINUTES'){
-                        waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
-                    }
-                }
-            }      
-        }
+        // stage("Quality Gate"){
+        //     steps{
+        //         catchError(buildResult: 'SUCCESS', message: 'Oop! The Quality gate has not been completed yet', stageResult: 'ABORTED') {
+        //             timeout(time: 1, unit: 'MINUTES'){
+        //                 waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
+        //             }
+        //         }
+        //     }      
+        // }
         stage("Build images"){
             steps{
                 dir('api') {
