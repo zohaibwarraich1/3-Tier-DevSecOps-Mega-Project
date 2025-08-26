@@ -101,17 +101,17 @@ pipeline{
                 sh '''
                     trivy image \
                     --severity MEDIUM,HIGH,CRITICAL \
-                    --format template \
-                    --template "@contrib/html.tpl" \
-                    --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.html \
-                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
+                    --format json \
+                    --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
+                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT} \
+                    || true
 
                     trivy image \
                     --severity MEDIUM,HIGH,CRITICAL \
-                    --format template \
-                    --template "@contrib/html.tpl" \
-                    --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.html \
-                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT}
+                    --format json \
+                    --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
+                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT} \
+                    || true
                 '''
             }
         }
@@ -125,6 +125,42 @@ pipeline{
     }
     post{
         always{
+            sh '''
+                trivy convert \
+                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                --output api-audit-report.html api-audit-report.json
+                
+                trivy convert \
+                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                --output client-audit-report.html client-audit-report.json \
+                || true
+
+                trivy convert \
+                --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
+                --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.xml \
+                trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
+                || true
+                
+                trivy convert \
+                --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
+                --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.xml \
+                trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
+                || true
+                
+                trivy convert \
+                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.html \
+                trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
+                || true
+                
+                trivy convert \
+                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.html \
+                trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
+                || true
+            '''
+        }
+        unsuccessful {
             cleanWs()
         }
     }
