@@ -115,16 +115,12 @@ pipeline{
                 '''
             }
         }
-        stage("Trivy Scan Images for Vulnerability"){
+        stage("Deploye using Docker Compose"){
             steps{
                 input {
                     message 'Continue to Deployment ?'
                     ok 'Yes'
                 }
-            }
-        }
-        stage("Deploye using Docker Compose"){
-            steps{
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
                     sh '''
                         docker compose --env-file ${ENV_FILE} up -d \
