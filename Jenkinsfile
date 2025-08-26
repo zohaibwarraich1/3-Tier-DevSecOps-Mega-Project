@@ -71,7 +71,7 @@ pipeline{
         }
         stage("Build images"){
             steps{
-                dir('api') {
+                dir('client') {
                     sh '''
                         docker build -t ${PROJECT_NAME}-client-image:${GIT_COMMIT} .
                         docker tag ${PROJECT_NAME}-client-image:${GIT_COMMIT} ${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
