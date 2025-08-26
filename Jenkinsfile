@@ -35,7 +35,7 @@ pipeline{
                 dir('client') {
                     sh '''
                         npm install --production 
-                        // npm run build
+                        # npm run build
                     '''
                 }
                 dir('api') {
