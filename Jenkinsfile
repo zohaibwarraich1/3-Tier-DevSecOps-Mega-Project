@@ -123,6 +123,8 @@ pipeline{
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
                     sh '''
                         cat $ENV_FILE > temp.env
+                        #this is to move the cursor to next line in temp.env after copying ENV_FILE
+                        echo "" >> temp 
                         echo "BACKEND=$DOCKER_CREDS_USR/$PROJECT_NAME-api-image:$GIT_COMMIT" >> temp.env
                         echo "FRONTEND=$DOCKER_CREDS_USR/$PROJECT_NAME-client-image:$GIT_COMMIT" >> temp.env
                         # docker compose --env-file temp.env up -d
