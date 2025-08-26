@@ -16,11 +16,11 @@ pipeline{
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3')
     }
     stages{
-        stage("Clean Workspace"){
-            steps{
-                cleanWs()
-            }
-        }
+        // stage("Clean Workspace"){
+        //     steps{
+        //         cleanWs()
+        //     }
+        // }
         stage("Checkout Code"){
             steps{
                 options{
