@@ -17,11 +17,11 @@ pipeline{
         skipDefaultCheckout()
     }
     stages{
-        stage("Clean Workspace"){
-            steps{
-                cleanWs()
-            }
-        }
+        // stage("Clean Workspace"){
+        //     steps{
+        //         cleanWs()
+        //     }
+        // }
         stage("Checkout Code"){
             steps{
                 options{
