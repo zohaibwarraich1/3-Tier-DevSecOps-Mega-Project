@@ -122,9 +122,11 @@ pipeline{
                 }
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
                     sh '''
-                        docker compose --env-file ${ENV_FILE} up -d \
-                        -e BACKEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT} \
-                        -e FRONTEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
+                        cat ${ENV_FILE} > temp.env
+                        echo "BACKEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT}" >> temp.env
+                        echo "FRONTEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}" >> temp.env
+                        docker compose --env-file temp.env up -d
+                        rm -f temp.env
                     '''
                 }
             }
