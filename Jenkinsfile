@@ -104,14 +104,14 @@ pipeline{
                     --format template \
                     --template "@contrib/html.tpl" \
                     --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.html \
-                    ${USERNAME}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
+                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
 
                     trivy image \
                     --severity MEDIUM,HIGH,CRITICAL \
                     --format template \
                     --template "@contrib/html.tpl" \
                     --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.html \
-                    ${USERNAME}/${PROJECT_NAME}-api-image:${GIT_COMMIT}
+                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT}
                 '''
             }
         }
