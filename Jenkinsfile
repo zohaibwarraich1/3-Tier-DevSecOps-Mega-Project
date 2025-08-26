@@ -135,7 +135,7 @@ pipeline{
             sh '''
                 trivy convert \
                 --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output api-audit-report.html api-audit-report.json
+                --output api-audit-report.html api-audit-report.json \
                 || true
                 
                 trivy convert \
