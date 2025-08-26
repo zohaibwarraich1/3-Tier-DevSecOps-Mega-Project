@@ -14,12 +14,12 @@ pipeline{
         disableResume()
         disableConcurrentBuilds abortPrevious: true
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '3')
-        skipDefaultCheckout()
+        // skipDefaultCheckout()
     }
     stages{
         stage("Checkout Code"){
             steps{
-                git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
+                // git branch: 'main', url: 'https://github.com/zohaibwarraich1/3-Tier-DevSecOps-Mega-Project.git'
                 sh 'echo $GIT_COMMIT'
             }
         }
