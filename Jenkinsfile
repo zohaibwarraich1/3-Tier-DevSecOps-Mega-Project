@@ -92,8 +92,6 @@ pipeline{
                         echo $PASSWORD | docker login -u $USERNAME --password-stdin
                         docker push ${USERNAME}/${PROJECT_NAME}-api-image:${GIT_COMMIT}
                         docker push ${USERNAME}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
-                        # after pushing to dockerhub clean the images
-                        docker rmi -f $(docker images)
                     '''
                 }
             }
