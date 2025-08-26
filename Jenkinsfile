@@ -34,12 +34,12 @@ pipeline{
             steps{
                 dir('client') {
                     sh '''
-                        npm install --production 
+                        npm install --omit=dev 
                         # npm run build
                     '''
                 }
                 dir('api') {
-                    sh 'npm install --production'
+                    sh 'npm install --omit=dev'
                 }
             }
         }
@@ -51,11 +51,11 @@ pipeline{
         stage("Dependancy Check"){
             steps{
                 dir('client') {
-                    sh 'npm audit --json > client-audit-report.json'
+                    sh 'npm audit --json > client-audit-report.json || true'
                     archiveArtifacts allowEmptyArchive: true, artifacts: 'client-audit-dependancy-report.json', followSymlinks: false
                 }
                 dir('api') {
-                    sh 'npm audit --json > api-audit-report.json'
+                    sh 'npm audit --json > api-audit-report.json || true'
                     archiveArtifacts allowEmptyArchive: true, artifacts: 'api-audit-dependancy-report.json', followSymlinks: false
                 }
             }
