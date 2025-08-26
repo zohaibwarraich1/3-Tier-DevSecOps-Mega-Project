@@ -73,8 +73,10 @@ pipeline{
             }
         }
         stage("Quality Gate"){
-            timeout(time: 2, unit: 'MINUTES'){
-                waitForQualityGate abortPipeline: true, credentialsId: 'sonarqube-token'
+            steps{
+                timeout(time: 2, unit: 'MINUTES'){
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonarqube-token'
+                }
             }      
         }
         stage("Build images"){
