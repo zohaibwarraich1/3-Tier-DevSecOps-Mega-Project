@@ -126,7 +126,11 @@ pipeline{
         stage("Deploye using Docker Compose"){
             steps{
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
-                    sh 'docker compose --env-file ${ENV_FILE} up -d'
+                    sh '''
+                        docker compose --env-file ${ENV_FILE} up -d \
+                        -e BACKEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT} \
+                        -e FRONTEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}
+                    '''
                 }
             }
         }
