@@ -167,6 +167,9 @@ pipeline{
                 trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
                 || true
             '''
+
+            junit allowEmptyResults: true, testResults: 'trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.xml'
+            junit allowEmptyResults: true, testResults: 'trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.xml'
         }
         unsuccessful {
             cleanWs()
