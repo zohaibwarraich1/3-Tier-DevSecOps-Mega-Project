@@ -121,14 +121,14 @@ pipeline{
                     input message: 'Continue to Deployment ?', ok: 'Yes'
                 }
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
-                    sh """
+                    sh '''
                         cat ${ENV_FILE} > temp.env
                         echo "BACKEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT}" >> temp.env
                         echo "FRONTEND=${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT}" >> temp.env
                         # docker compose --env-file temp.env up -d
                         cat temp.env
                         rm -f temp.env
-                    """
+                    '''
                 }
             }
         }
