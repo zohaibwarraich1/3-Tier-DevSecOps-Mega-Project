@@ -32,7 +32,7 @@ pipeline{
         }
         stage("Unit Test"){
             steps{
-                ech 'Skipping Tests because there are no tests available for this project at the moment'
+                echo 'Skipping Tests because there are no tests available for this project at the moment'
             }
         }
         stage("Dependancy Check"){
@@ -168,7 +168,7 @@ pipeline{
                 || true
             '''
         }
-        failure {
+        unsuccessful {
             cleanWs()
         }
     }
