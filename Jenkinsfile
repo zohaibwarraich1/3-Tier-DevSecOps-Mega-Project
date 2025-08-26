@@ -4,7 +4,7 @@ pipeline{
     }
     environment{
         SONAR_SCANNER = tool 'sonarqube-scanner-tool'
-        PROJECT_NAME = '3-Tier-DevSecOps-Mega-Project'
+        PROJECT_NAME = '3-tier-devsecops-mega-project'
         DOCKER_CREDS = credentials('docker-token')
     }
     tools{
@@ -73,7 +73,7 @@ pipeline{
         stage("Quality Gate"){
             steps{
                 catchError(buildResult: 'SUCCESS', message: 'Oop! The Quality gate has not been completed yet', stageResult: 'ABORTED') {
-                    timeout(time: 10, unit: 'MINUTES'){
+                    timeout(time: 1, unit: 'MINUTES'){
                         waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-token'
                     }
                 }
