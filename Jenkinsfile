@@ -33,7 +33,7 @@ pipeline{
             steps{
                 dir('client') {
                     sh '''
-                        npm install --production && \ 
+                        npm install --production 
                         npm run build
                     '''
                 }
