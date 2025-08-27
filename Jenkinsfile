@@ -187,7 +187,6 @@ pipeline{
             slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline completed successfully! There are no issues.'
         }
         failure {
-            sh 'docker compose down'
             cleanWs()
             slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Failed! There are some issue. Please fix it as soon as possibile.'
         }
