@@ -149,25 +149,25 @@ pipeline{
 
                 trivy convert \
                 --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
-                --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.xml \
+                --output trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.xml \
                 trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
                 || true
                 
                 trivy convert \
                 --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
-                --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.xml \
+                --output trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.xml \
                 trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
                 || true
                 
                 trivy convert \
                 --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.html \
+                --output trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.html \
                 trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
                 || true
                 
                 trivy convert \
                 --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.html \
+                --output trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.html \
                 trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
                 || true
             '''
