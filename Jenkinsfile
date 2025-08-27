@@ -180,8 +180,8 @@ pipeline{
             }
             // junit allowEmptyResults: true, testResults: 'trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.xml'
             // junit allowEmptyResults: true, testResults: 'trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.xml'
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './trivy-reports', reportFiles: 'trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.html', reportName: 'Trivy API Image Report', reportTitles: '', useWrapperFileDirectly: true])
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './trivy-reports', reportFiles: 'trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.html', reportName: 'Trivy CLIENT Image Report', reportTitles: '', useWrapperFileDirectly: true])
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './trivy-reports', reportFiles: 'trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.html', reportName: 'Trivy API Image Report', reportTitles: '', useWrapperFileDirectly: false])
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './trivy-reports', reportFiles: 'trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.html', reportName: 'Trivy CLIENT Image Report', reportTitles: '', useWrapperFileDirectly: false])
         }
         success {
             slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline completed successfully! There are no issues.'
