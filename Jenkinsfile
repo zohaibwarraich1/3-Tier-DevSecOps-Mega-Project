@@ -17,10 +17,12 @@ pipeline{
         // skipDefaultCheckout()
     }
     stages{
-        stage("Notifying Team"){
-            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Started'
+        stage("Notifying Team") {
+            steps {
+                slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Started'
+            }
         }
-        stage("Installing Dependencies"){
+        stage("Installing Dependencies") {
             steps{
                 dir('client') {
                     sh '''
@@ -33,12 +35,12 @@ pipeline{
                 }
             }
         }
-        stage("Unit Test"){
+        stage("Unit Test") {
             steps{
                 echo 'Skipping Tests because there are no tests available for this project at the moment'
             }
         }
-        stage("Dependancy Check"){
+        stage("Dependancy Check") {
             steps{
                 dir('client') {
                     sh 'npm audit --json > client-audit-report.json || true'
@@ -50,7 +52,7 @@ pipeline{
                 }
             }
         }
-        stage("SonarQube Scan"){
+        stage("SonarQube Scan") {
             steps{
                 withSonarQubeEnv('sonarqube-server'){
                     sh '''
