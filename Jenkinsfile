@@ -101,21 +101,24 @@ pipeline{
         }
         stage("Trivy Scan Images for Vulnerability"){
             steps{
-                sh '''
-                    trivy image \
-                    --severity MEDIUM,HIGH,CRITICAL \
-                    --format json \
-                    --output trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
-                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT} \
-                    || true
-
-                    trivy image \
-                    --severity MEDIUM,HIGH,CRITICAL \
-                    --format json \
-                    --output trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
-                    ${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT} \
-                    || true
-                '''
+                sh 'mkdir -p trivy-reports'
+                dir('trivy-reports') {
+                    sh '''
+                        trivy image \
+                        --severity MEDIUM,HIGH,CRITICAL \
+                        --format json \
+                        --output trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.json \
+                        ${DOCKER_CREDS_USR}/${PROJECT_NAME}-client-image:${GIT_COMMIT} \
+                        || true
+    
+                        trivy image \
+                        --severity MEDIUM,HIGH,CRITICAL \
+                        --format json \
+                        --output trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.json \
+                        ${DOCKER_CREDS_USR}/${PROJECT_NAME}-api-image:${GIT_COMMIT} \
+                        || true
+                    '''
+                }
             }
         }
         stage("Deploy using Docker Compose"){
@@ -136,46 +139,47 @@ pipeline{
     }
     post{
         always{
-            sh '''
-                trivy convert \
-                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output api-audit-report.html api-audit-report.json \
-                || true
-                
-                trivy convert \
-                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output client-audit-report.html client-audit-report.json \
-                || true
-
-                trivy convert \
-                --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
-                --output trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.xml \
-                trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
-                || true
-                
-                trivy convert \
-                --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
-                --output trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.xml \
-                trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
-                || true
-                
-                trivy convert \
-                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.html \
-                trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.json \
-                || true
-                
-                trivy convert \
-                --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
-                --output trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.html \
-                trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.json \
-                || true
-            '''
-
+            dir('trivy-reports') {
+                sh '''
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    --output api-audit-report.html api-audit-report.json \
+                    || true
+                    
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    --output client-audit-report.html client-audit-report.json \
+                    || true
+    
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
+                    --output trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.xml \
+                    trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.json \
+                    || true
+                    
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/junit.tpl" \
+                    --output trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.xml \
+                    trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.json \
+                    || true
+                    
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    --output trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.html \
+                    trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.json \
+                    || true
+                    
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    --output trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.html \
+                    trivy-${PROJECT_NAME}-api-image-${GIT_COMMIT}-report.json \
+                    || true
+                '''
+            }
             // junit allowEmptyResults: true, testResults: 'trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.xml'
             // junit allowEmptyResults: true, testResults: 'trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.xml'
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.html', reportName: 'Trivy API Image Report', reportTitles: '', useWrapperFileDirectly: true])
-            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.html', reportName: 'Trivy CLIENT Image Report', reportTitles: '', useWrapperFileDirectly: true])
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './trivy-reports', reportFiles: 'trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.html', reportName: 'Trivy API Image Report', reportTitles: '', useWrapperFileDirectly: true])
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './trivy-reports', reportFiles: 'trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.html', reportName: 'Trivy CLIENT Image Report', reportTitles: '', useWrapperFileDirectly: true])
         }
         success {
             slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline completed successfully! There are no issues.'
