@@ -17,6 +17,9 @@ pipeline{
         // skipDefaultCheckout()
     }
     stages{
+        stage("Notifying Team"){
+            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Started'
+        }
         stage("Installing Dependencies"){
             steps{
                 dir('client') {
@@ -117,6 +120,7 @@ pipeline{
         }
         stage("Deploy using Docker Compose"){
             steps{
+                slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Permission pending for deployment!'
                 input message: 'Continue to Deployment ?', ok: 'Yes'
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
                     sh '''
@@ -173,8 +177,12 @@ pipeline{
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-${PROJECT_NAME}-api-image:${GIT_COMMIT}-report.html', reportName: 'Trivy API Image Report', reportTitles: '', useWrapperFileDirectly: true])
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'trivy-${PROJECT_NAME}-client-image:${GIT_COMMIT}-report.html', reportName: 'Trivy CLIENT Image Report', reportTitles: '', useWrapperFileDirectly: true])
         }
+        success {
+            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline completed successfully! There are no issues.'
+        }
         failure {
             cleanWs()
+            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Failed! There are some issue. Please fix it as soon as possibile.'
         }
     }
 }
