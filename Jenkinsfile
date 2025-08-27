@@ -19,7 +19,7 @@ pipeline{
     stages{
         stage("Notifying Team") {
             steps {
-                slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Started. Build No. ${BUILD_NUMBER}'
+                slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Started. Build No. ${env.BUILD_NUMBER}'
             }
         }
         stage("Installing Dependencies") {
@@ -125,7 +125,7 @@ pipeline{
         }
         stage("Deploy using Docker Compose"){
             steps{
-                slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Permission pending for deployment! Build No. ${BUILD_NUMBER}'
+                slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Permission pending for deployment! Build No. ${env.BUILD_NUMBER}'
                 input message: 'Continue to Deployment ?', ok: 'Yes'
                 withCredentials([file(credentialsId: 'env-file-of-project', variable: 'ENV_FILE')]) {
                     sh '''
@@ -184,11 +184,11 @@ pipeline{
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './trivy-reports', reportFiles: 'trivy-${PROJECT_NAME}-client-image-${GIT_COMMIT}-report.html', reportName: 'Trivy CLIENT Image Report', reportTitles: '', useWrapperFileDirectly: false])
         }
         success {
-            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline completed successfully! There are no issues. Build No. ${BUILD_NUMBER}'
+            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline completed successfully! There are no issues. Build No. ${env.BUILD_NUMBER}'
         }
         failure {
             cleanWs()
-            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Failed! There are some issue. Please fix it as soon as possibile. Build No. ${BUILD_NUMBER}'
+            slackSend channel: 'project-3-tier-devsecops-mega-project', message: 'Pipeline Failed! There are some issue. Please fix it as soon as possibile. Build No. ${env.BUILD_NUMBER}'
         }
     }
 }
